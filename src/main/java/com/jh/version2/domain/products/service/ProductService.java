@@ -47,8 +47,16 @@ public class ProductService {
         return productRepository.findProductsForLowCostByBrand();
     }
 
-    public List<ProductCategoryDto> getCategoryForTopLow(Category category) {
-        return productRepository.findCategoryForTopLow(category);
+    public List<ProductCategoryDto> getCategoryForTop(Category category) {
+        final List<ProductCategoryDto> results = productRepository.findCategoryForTop(category);
+        results.forEach(dto -> dto.setCategory(null));
+        return results;
+    }
+
+    public List<ProductCategoryDto> getCategoryForLow(Category category) {
+        final List<ProductCategoryDto> results = productRepository.findCategoryForLow(category);
+        results.forEach(dto -> dto.setCategory(null));
+        return results;
     }
 
     public Product findByIdAndDeleteYn(Long id) {

@@ -11,5 +11,8 @@ public interface ProductRepositoryCustom {
 
     List<ProductCategoryDto> findProductsForLowCostByBrand();
 
-    List<ProductCategoryDto> findCategoryForTopLow(Category category);
+    List<ProductCategoryDto> findCategoryForTop(Category category);
+
+    List<ProductCategoryDto> findCategoryForLow(Category category);
+
 }

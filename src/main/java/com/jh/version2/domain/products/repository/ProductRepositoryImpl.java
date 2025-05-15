@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,38 +86,45 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
     }
 
     @Override
-    public List<ProductCategoryDto> findCategoryForTopLow(Category category) {
+    public List<ProductCategoryDto> findCategoryForLow(Category category) {
         QProduct product = QProduct.product;
 
-        // 최저가
-        ProductCategoryDto low = jpaQueryFactory
-                .select(Projections.constructor(
-                        ProductCategoryDto.class,
-                        product
-                ))
+        // 최저가 구하기
+        Integer minPrice = jpaQueryFactory
+                .select(product.price.min())
                 .from(product)
                 .where(product.category.eq(category)
                         .and(product.deleteYn.eq(YesOrNo.N)))
-                .orderBy(product.price.asc())
-                .fetchFirst();
+                .fetchOne();
 
-        // 최고가
-        ProductCategoryDto top = jpaQueryFactory
-                .select(Projections.constructor(
-                        ProductCategoryDto.class,
-                        product
-                ))
+        return jpaQueryFactory
+                .select(Projections.constructor(ProductCategoryDto.class, product))
+                .from(product)
+                .where(product.category.eq(category)
+                        .and(product.deleteYn.eq(YesOrNo.N))
+                        .and(product.price.eq(minPrice)))
+                .fetch();
+    }
+
+    @Override
+    public List<ProductCategoryDto> findCategoryForTop(Category category) {
+        QProduct product = QProduct.product;
+
+        // 최고가 구하기
+        Integer maxPrice = jpaQueryFactory
+                .select(product.price.max())
                 .from(product)
                 .where(product.category.eq(category)
                         .and(product.deleteYn.eq(YesOrNo.N)))
-                .orderBy(product.price.desc())
-                .fetchFirst();
+                .fetchOne();
 
-        List<ProductCategoryDto> result = new ArrayList<>();
-        if (low != null) result.add(low);
-        if (top != null && !top.equals(low)) result.add(top);
-
-        return result;
+        return jpaQueryFactory
+                .select(Projections.constructor(ProductCategoryDto.class, product))
+                .from(product)
+                .where(product.category.eq(category)
+                        .and(product.deleteYn.eq(YesOrNo.N))
+                        .and(product.price.eq(maxPrice)))
+                .fetch();
     }
 
 }

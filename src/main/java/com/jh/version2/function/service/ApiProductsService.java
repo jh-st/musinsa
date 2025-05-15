@@ -9,10 +9,8 @@ import com.jh.version2.domain.products.dto.*;
 import com.jh.version2.domain.products.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,20 +57,9 @@ public class ApiProductsService {
         Category category = Category.from(categoryName)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리: " + categoryName));
 
-        final List<ProductCategoryDto> results = productService.getCategoryForTopLow(category);
-        List<ProductCategoryDto> low = new ArrayList<>();
-        List<ProductCategoryDto> top = new ArrayList<>();
-
-        results.forEach(dto -> dto.setCategory(null));
-
-        if (!CollectionUtils.isEmpty(results)) {
-            low.add(results.get(0));
-            top.add(results.get(1));
-        }
-
         return CategoryTopLowDto.builder()
-                .low(low)
-                .top(top)
+                .low(productService.getCategoryForLow(category))
+                .top(productService.getCategoryForTop(category))
                 .categoryName(categoryName)
                 .build();
     }
