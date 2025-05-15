@@ -3,7 +3,10 @@ package com.jh.version2.domain.brand.entity;
 import com.jh.version2.common.variable.YesOrNo;
 import com.jh.version2.domain.brand.dto.BrandApplyDto;
 import com.jh.version2.domain.products.entity.Product;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -13,7 +16,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate
 public class Brand implements Serializable {

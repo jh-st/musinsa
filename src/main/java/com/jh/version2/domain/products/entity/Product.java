@@ -5,7 +5,10 @@ import com.jh.version2.common.variable.Category;
 import com.jh.version2.common.variable.YesOrNo;
 import com.jh.version2.domain.brand.entity.Brand;
 import com.jh.version2.domain.products.dto.ProductApplyDto;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -13,7 +16,6 @@ import java.io.Serializable;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate
 public class Product implements Serializable {
